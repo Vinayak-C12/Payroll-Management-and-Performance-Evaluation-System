@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOLO Inference Web App</title>
+</head>
+<body>
+    <h1>YOLO Inference Web App</h1>
+
+    <form action="/" method="post" enctype="multipart/form-data">
+        <label for="file">Upload an image:</label>
+        <input type="file" name="file" accept=".jpg, .jpeg, .png" id="fileInput">
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="output">
+        <!-- Display the detected image and prediction here -->
+        <img id="detectedImage" alt="Detected Image">
+        <p id="prediction"></p>
+    </div>
+
+    <script>
+        function uploadImage() {
+            // Get the file input element
+            var fileInput = document.getElementById('fileInput');
+            
+            // Create a FormData object and append the selected file
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            // Make an AJAX request to the server
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Parse the JSON response from the server
+                    var response = JSON.parse(xhr.responseText);
+
+                    // Update the detected image and prediction
+                    var detectedImage = document.getElementById('detectedImage');
+                    detectedImage.src = response.detected_image_path;
+
+                    var prediction = document.getElementById('prediction');
+                    prediction.innerText = response.prediction;
+                } else {
+                    console.error('Error:', xhr.statusText);
+                }
+            };
+            
+            // Send the FormData to the server
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>

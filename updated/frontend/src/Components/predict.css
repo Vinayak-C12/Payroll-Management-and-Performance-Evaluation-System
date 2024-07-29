@@ -1,0 +1,50 @@
+.employee-list {
+  list-style: decimal;
+  padding-left: 20px;
+}
+
+.prediction-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.employee-details {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.employee-details > div {
+  width: 23%;
+  margin-right: 2%;
+  margin-bottom: 5px;
+}
+
+.prediction-text {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.strong-text {
+  font-weight: bold;
+}
+
+.prediction-span { /* Changed selector to target class directly */
+  color: inherit; /* Inherit color from parent element */
+}
+
+.prediction-text span[data-status='FIRED'] {
+  color: red;
+}
+
+.prediction-text span[data-status='HIKE'] {
+  color: green;
+}
+
+.prediction-text span[data-status='NO HIKE'] {
+  color: blue;
+}

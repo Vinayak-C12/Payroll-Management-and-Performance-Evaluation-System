@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Performance Prediction</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Employee Performance Prediction</h1>
+    <form id="prediction-form">
+        <label for="employeeId">Employee ID:</label>
+        <input type="number" id="employeeId" name="employeeId" required>
+        <br>
+        <label for="absence">Absence (Days):</label>
+        <input type="number" id="absence" name="absence" required>
+        <br>
+        <label for="overtime">Overtime (Hours):</label>
+        <input type="number" id="overtime" name="overtime" required>
+        <br>
+        <button type="submit">Predict</button>
+    </form>
+    <div id="predictions"></div>
+    <script>
+        $(document).ready(function() {
+            $('#prediction-form').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get user input data
+                const employeeId = $('#employeeId').val();
+                const absence = $('#absence').val();
+                const overtime = $('#overtime').val();
+
+                // Prepare data to send to the backend
+                const data = {
+                    data: [{
+                        employeeId: employeeId,
+                        absence: absence,
+                        overtime: overtime
+                    }]
+                };
+
+                // Send AJAX request to /predict endpoint
+                $.ajax({
+                    url: '/predict',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        // Handle successful response and display predictions
+                        $('#predictions').html(formatPredictions(response.predictions));
+                    },
+                    error: function(error) {
+                        // Handle errors during AJAX request
+                        console.error('Error:', error);
+                        $('#predictions').html('An error occurred during prediction.');
+                    }
+                });
+            });
+        });
+
+        // Optional function to format predictions for display
+        function formatPredictions(predictions) {
+            let formattedPredictions = '';
+            for (const prediction of predictions) {
+                formattedPredictions += `
+                    <p>Employee ID: ${prediction.employeeId}</p>
+                    <p>Predicted Performance: ${prediction.prediction}</p>
+                `;
+            }
+            return formattedPredictions;
+        }
+    </script>
+</body>
+</html>
